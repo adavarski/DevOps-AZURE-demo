@@ -1,8 +1,10 @@
-Example AKS cluster using Terraform
-This repository showcases using Terraform to provision a new network and AKS cluster with nodes within.
+### Example AKS cluster using Terraform
+
+This repository showcases using Terraform to provision a new AKS cluster with nodes within.
 
 Install and configure
-Ensure that kubectl, az, and terraform are installed first.
+
+Ensure that az, terraform and az are installed first.
 
 Initialise the Azure CLI if you haven't already:
 
