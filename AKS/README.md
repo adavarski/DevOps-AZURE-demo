@@ -2,8 +2,10 @@
 
 This repository showcases using Terraform to provision a new AKS cluster with nodes within.
 
-### Prerequisites:
+#### Prerequisites:
 Azure subscription: If you don't have an Azure subscription, create a free account before you begin.
+
+#### Tasks:
 
 - Install and configure az, terraform and kubectl (ensure that az, terraform and kubectl are installed first).
 
@@ -17,8 +19,8 @@ az login
 ```
 # Get subscriptionId
 az account list --query "[].{name:name, subscriptionId:id}"
-# Use subscriptionId for Azure service principal creation
-az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/{subscriptionId}"
+# Use above subscriptionId for Azure service principal creation, and save command output
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<subscription_id>"
 ```
 
 - Authenticate to Azure using a service principal (optional)
@@ -38,21 +40,66 @@ Generating public/private rsa key pair.
 Enter file in which to save the key (/home/davar/.ssh/id_rsa): /home/davar/.ssh/azure-aks
 ...
 ```
-Setup variables (Fill out variables.tf with the variables you'd like)
+Setup variables (fill out variables.tf with the variables you'd like)
 
-Required variables are location, and name, the Azure location/region, name you'd like your cluster, client_id, client_secret, subscription_id, tenant_id (Note: you get {client_id, client_secret, subscription_id, tenant_id} during service principal creation)
+Required variables are location, and name, the Azure location/region, name you'd like your cluster, and client_id, client_secret, subscription_id, tenant_id (Note: you get/save {client_id, client_secret, subscription_id, tenant_id} during service principal creation)
 
-NB: Note Your free account has a four-core limit that will be violated if we go with the big AKS cluster, so if we want 2 nodes pool use: D1_v2, if 1 node pool:Standard_D2_v2 is OK.
+Note: Your free account has a four-core limit (4 vCore) that will be violated if we go with big AKS cluster, so if we want 2 nodes pool use: D1_v2, for 1 node pool: Standard_D2_v2 is OK.
 
-Check available location and k8s versions for needed location (needed for variables.tf):
+Check available location and k8s versions for needed location (@variables.tf):
 ```
 $ az account list-locations -o table
 $ az aks get-versions --location eastus
 ```
 
 - Provisioning
-terraform init
-terraform apply
+```
+$ terraform init
+$ terraform apply
+```
+Example output:
+```
+$ terraform apply
+
+...
+azurerm_resource_group.k8s: Creating...
+azurerm_resource_group.k8s: Creation complete after 2s [id=/subscriptions/53a13c25-74e3-4753-8e1f-6d5d436e7109/resourceGroups/k8s-resources]
+azurerm_kubernetes_cluster.k8s: Creating...
+azurerm_kubernetes_cluster.k8s: Still creating... [10s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [20s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [30s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [40s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [50s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [1m0s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [1m10s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [1m20s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [1m30s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [1m40s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [1m50s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [2m0s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [2m10s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [2m20s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [2m30s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [2m40s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [2m50s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [3m0s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [3m10s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [3m20s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [3m30s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [3m40s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [3m50s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [4m0s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [4m10s elapsed]
+azurerm_kubernetes_cluster.k8s: Still creating... [4m20s elapsed]
+azurerm_kubernetes_cluster.k8s: Creation complete after 4m21s [id=/subscriptions/53a13c25-74e3-4753-8e1f-6d5d436e7109/resourcegroups/k8s-resources/providers/Microsoft.ContainerService/managedClusters/kubernetes-aks1]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+...
+
+```
+
 
 - Configure kubectl
 ```
