@@ -15,7 +15,8 @@ Initialise the Azure CLI if you haven't already:
 ```
 az login
 ```
-- Create an Azure service principal using the Azure CLI
+- Create an Azure service principal using the Azure CLI (Azure Active Directory service principals for automation authentication)
+
 ```
 # Get subscriptionId
 az account list --query "[].{name:name, subscriptionId:id}"
@@ -201,6 +202,9 @@ b9a250ac022ce       f86c769f3c5c4       29 minutes ago      Running             
 
 ```
 $ terraform destroy
+# Delete Azure Active Directory service principals for automation authentication
+$ az ad sp show --id 00000000-0000-0000-0000-000000000000
+$ az ad sp delete --id 00000000-0000-0000-0000-000000000000
 ```
 
 Example output:
