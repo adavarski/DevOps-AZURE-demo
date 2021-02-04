@@ -200,7 +200,25 @@ b9a250ac022ce       f86c769f3c5c4       29 minutes ago      Running             
 - Tearing down
 
 ```
-terraform destroy
+$ terraform destroy
+```
+
+Example output:
+```
+$ terraform destroy
+
+...
+azurerm_kubernetes_cluster.k8s: Destroying... [id=/subscriptions/53a13c25-74e3-4753-8e1f-6d5d436e7109/resourcegroups/k8s-resources/providers/Microsoft.ContainerService/managedClusters/kubernetes-aks1]
+azurerm_kubernetes_cluster.k8s: Still destroying... [id=/subscriptions/53a13c25-74e3-4753-8e1f-...ervice/managedClusters/kubernetes-aks1, 10s elapsed]
+...
+azurerm_kubernetes_cluster.k8s: Still destroying... [id=/subscriptions/53a13c25-74e3-4753-8e1f-...ervice/managedClusters/kubernetes-aks1, 5m0s elapsed]
+azurerm_kubernetes_cluster.k8s: Destruction complete after 5m6s
+azurerm_resource_group.k8s: Destroying... [id=/subscriptions/53a13c25-74e3-4753-8e1f-6d5d436e7109/resourceGroups/k8s-resources]
+azurerm_resource_group.k8s: Still destroying... [id=/subscriptions/53a13c25-74e3-4753-8e1f-6d5d436e7109/resourceGroups/k8s-resources, 10s elapsed]
+azurerm_resource_group.k8s: Still destroying... [id=/subscriptions/53a13c25-74e3-4753-8e1f-6d5d436e7109/resourceGroups/k8s-resources, 20s elapsed]
+azurerm_resource_group.k8s: Still destroying... [id=/subscriptions/53a13c25-74e3-4753-8e1f-6d5d436e7109/resourceGroups/k8s-resources, 30s elapsed]
+azurerm_resource_group.k8s: Still destroying... [id=/subscriptions/53a13c25-74e3-4753-8e1f-6d5d436e7109/resourceGroups/k8s-resources, 40s elapsed]
+azurerm_resource_group.k8s: Destruction complete after 49s
 ```
 
 What now?
