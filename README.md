@@ -5,6 +5,5 @@ $ ./build-environment.sh
 ```
 Simple demos:
 
-1.AKS
+[AKS](https://github.com/adavarski/DevOps-AZURE-demo/AKS/)
 
-2.VM
