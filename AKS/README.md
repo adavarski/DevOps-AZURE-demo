@@ -64,7 +64,7 @@ cat ~/.kube/config
 ```
 # Check k8s cluster
 
-$ ./kubernetes/client/bin/kubectl version
+$ kubectl version
 Client Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.6", GitCommit:"fbf646b339dc52336b55d8ec85c181981b86331a", GitTreeState:"clean", BuildDate:"2020-12-18T12:09:30Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"linux/amd64"}
 Server Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.6", GitCommit:"fbf646b339dc52336b55d8ec85c181981b86331a", GitTreeState:"clean", BuildDate:"2020-12-18T16:06:08Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"linux/amd64"}
 
@@ -75,6 +75,7 @@ CoreDNS is running at https://kubecluster-478665c0.hcp.eastus.azmk8s.io:443/api/
 Metrics-server is running at https://kubecluster-478665c0.hcp.eastus.azmk8s.io:443/api/v1/namespaces/kube-system/services/https:metrics-server:/proxy
 
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+
 $ kubectl get node -o wide
 NAME                              STATUS   ROLES   AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
 aks-default-19536001-vmss000000   Ready    agent   19m   v1.19.6   10.240.0.4    <none>        Ubuntu 18.04.5 LTS   5.4.0-1035-azure   containerd://1.4.3+azure
@@ -108,7 +109,7 @@ kube-system   replicaset.apps/coredns-b94d8b788               2         2       
 kube-system   replicaset.apps/metrics-server-77c8679d7d       1         1         1       22m
 kube-system   replicaset.apps/tunnelfront-f99dd9b64           1         1         1       22m
 
-# Deploy pod, create LoadBalancer
+# LoadBalancer
 
 $ kubectl run nginx --image=nginx --port=80
 $ kubectl apply -f k8s-manifests/public-svc.yaml
@@ -128,7 +129,7 @@ $ kubectl cp ~/.ssh/azure-aks $(kubectl get pod -l run=aks-ssh -o jsonpath='{.it
 $ kubectl exec -it aks-ssh -- bash
 root@aks-ssh:/# chmod 0600 /id_rsa 
 root@aks-ssh:/# apt-get update && apt-get install openssh-client -y
-root@aks-ssh:/# ssh -i ./id_rsa ubuntu@10.240.0.4
+root@aks-ssh:/# ssh -i /id_rsa ubuntu@10.240.0.4
 The authenticity of host '10.240.0.4 (10.240.0.4)' can't be established.
 ECDSA key fingerprint is SHA256:55fhUaux4iUyWKIbaju1PD+n4Ew0iddZBpX9W7jhHIc.
 Are you sure you want to continue connecting (yes/no)? yes
