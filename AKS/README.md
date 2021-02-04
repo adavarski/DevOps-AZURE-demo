@@ -2,38 +2,65 @@
 
 This repository showcases using Terraform to provision a new AKS cluster with nodes within.
 
-Install and configure
+Prerequisites:
+Azure subscription: If you don't have an Azure subscription, create a free account before you begin.
 
-Ensure that az, terraform and az are installed first.
+Install and configure az, terraform and kubectl (ensure that az, terraform and kubectl are installed first).
+
+- Authenticate to Azure
 
 Initialise the Azure CLI if you haven't already:
-
+```
 az login
-Setup variables
-Fill out terraform.tfvars with the variables you'd like.
+```
+- Create an Azure service principal using the Azure CLI
+```
+# Get subscriptionId
+az account list --query "[].{name:name, subscriptionId:id}"
+# Use subscriptionId for Azure service principal creation
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/{subscriptionId}"
+```
 
-Required variables are location, and name, the Azure location/region, and name you'd like your cluster.
+- Authenticate to Azure using a service principal (optional)
+```
+az login --service-principal -u <service_principal_name> -p "<service_principal_password>" --tenant "<service_principal_tenant>"
+```
+- Set the current Azure subscription - for use if you have multiple subscriptions (optional)
+```
+az account list --query "[].{name:name, subscriptionId:id}"
+az account set --subscription="<subscription_id>"
+az account show
+```
+Generate public/private ssh key pair (needed to ssh login @ pool VMs)
+```
+$ ssh-keygen 
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/davar/.ssh/id_rsa): /home/davar/.ssh/azure-aks
+...
+```
+Setup variables (Fill out variables.tf with the variables you'd like)
 
-For reference, running az account list-locations -o table will get a list of regions to use.
+Required variables are location, and name, the Azure location/region, name you'd like your cluster and client_id, client_secret, subscription_id, tenant_id (Note: you get {client_id, client_secret, subscription_id, tenant_id} during service principal creation)
 
-Availability zones can be configured for high availability if the chosen region supports it. An example terraform.tfvars:
+NB: Note Your free account has a four-core limit that will be violated if we go with the defaults AKS, so if we want 2 nodes pool use: D1_v2, if 1 node pool:Standard_D2_v2 is OK.
 
-name               = "mycluster"
-location           = "westus2"
-availability_zones = ["1", "2", "3"]
-node_count         = 3
-min_count          = 3
-max_count          = 6
+Check available location and k8s versions for needed location:
+```
+$ az account list-locations -o table
+$ az aks get-versions --location eastus
+```
 
-Provisioning
+
+- Provisioning
 terraform init
 terraform apply
 
 Configure kubectl
-export KUBECONFIG=~/.kube/Azure-AKS.conf
-
-az aks get-credentials --resource-group mycluster --name mycluster
-
+```
+cp ~/.kube/config ~/.kube/config.BACKUP
+az aks get-credentials --resource-group k8s-resources --name kubernetes-aks1
+cat ~/.kube/config
+```
 
 Test it works
 kubectl get nodes -o wide
