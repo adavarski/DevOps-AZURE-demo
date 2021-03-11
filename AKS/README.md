@@ -7,7 +7,7 @@ Azure subscription: If you don't have an Azure subscription, create a free accou
 
 #### Tasks:
 
-- Install and configure az, terraform and kubectl (ensure that az, terraform and kubectl are installed first).
+- Install and configure [az, terraform and kubectl](https://github.com/adavarski/DevOps-AZURE-demo/blob/main/build-environment.sh) (ensure that az, terraform and kubectl are installed first).
 
 - Authenticate to Azure
 
