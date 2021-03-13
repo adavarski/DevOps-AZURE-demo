@@ -23,6 +23,12 @@ Install the tools:
 ```bash
 ./provision-tools.sh
 ```
+Genrate ssh keys:
+```
+$ ssh-keygen 
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/davar/.ssh/id_rsa): /home/davar/.ssh/azure-devops
+```
 
 Login into azure-cli:
 
@@ -44,6 +50,12 @@ Initialize terraform:
 
 ```bash
 make terraform-init
+```
+Terraform plan example:
+```
+export TF_VAR_admin_username="$USER"
+export TF_VAR_admin_ssh_key_data="$(cat ~/.ssh/azure-devops.pub)"
+terraform plan
 ```
 
 Launch the example:
