@@ -25,7 +25,7 @@ terraform apply
 
 And open a shell inside the VM:
 ```
-ssh "$(terraform output app_ip_address)"
+ssh "$(terraform output ip_address)"
 ```
 Clean VM:
 ```
