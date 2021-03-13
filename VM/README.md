@@ -1,8 +1,8 @@
 Create Linux(Ubuntu) VM
 
-Create Windows VM 
+Create WindowsServer(2019-Datacenter) VM 
 
-Create VMs+LB
+Create Load Balancer + VMs
 
 ----------
 Install the tools:
