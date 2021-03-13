@@ -9,7 +9,7 @@ wget https://www.umlet.com/download/umlet_14_3/umlet-standalone-14.3.0.zip
 unzip umlet-standalone-14.3.0.zip
 sudo apt install pngquant
 ```
-Generate diagram:
+Generate aprchitecture.png:
 ```
 make terraform-plan
 ```
