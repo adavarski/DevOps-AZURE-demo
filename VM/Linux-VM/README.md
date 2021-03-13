@@ -1,5 +1,19 @@
 an example azure ubuntu virtual machine
 
+### Architecture diagram
+
+Pre:
+```
+cd ~/Downloads
+wget https://www.umlet.com/download/umlet_14_3/umlet-standalone-14.3.0.zip
+unzip umlet-standalone-14.3.0.zip
+sudo apt install pngquant
+```
+Generate diagram:
+```
+make terraform-plan
+```
+
 ![](architecture.png)
 
 # Usage (on a Ubuntu Desktop)
