@@ -23,11 +23,7 @@ Launch the example:
 terraform apply
 ```
 
-And open a shell inside the VM:
-```
-ssh "$(terraform output ip_address)"
-```
-Clean VM:
+Clean environment:
 ```
 terraform destroy
 ```
