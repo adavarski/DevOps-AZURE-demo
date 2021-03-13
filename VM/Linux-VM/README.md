@@ -76,5 +76,6 @@ And open a shell inside the VM:
 
 ```bash
 ssh "$(terraform output app_ip_address)"
+ssh devops@"$(terraform output app_ip_address)"
 ssh -i ~/.ssh/azure-devops devops@"$(terraform output app_ip_address)"
 ```
