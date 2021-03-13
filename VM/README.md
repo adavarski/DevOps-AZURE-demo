@@ -2,7 +2,7 @@ Create Linux(Ubuntu) VM
 
 Create Windows VM 
 
-Create VM+LB
+Create VMs+LB
 
 ----------
 Install the tools:
