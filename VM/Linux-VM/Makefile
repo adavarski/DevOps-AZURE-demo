@@ -8,14 +8,6 @@ terraform-init:
 	CHECKPOINT_DISABLE=1 \
 	terraform -v
 
-terraform-plan:
-        CHECKPOINT_DISABLE=1 \
-        TF_LOG=TRACE \
-        TF_LOG_PATH=terraform.log \
-        TF_VAR_admin_ssh_key_data="$(shell cat ~/.ssh/azure-devops.pub)" \
-        TF_VAR_admin_username="$USER" \
-        time terraform plan
-
 terraform-apply:
 	CHECKPOINT_DISABLE=1 \
 	TF_LOG=TRACE \
