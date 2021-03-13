@@ -1,4 +1,4 @@
-### Demos:
+### Examples:
 
 [Create Linux(Ubuntu) VM](https://github.com/adavarski/DevOps-AZURE-demo/tree/main/VM/Linux-VM)
 
