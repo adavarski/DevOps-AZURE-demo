@@ -1,3 +1,10 @@
+Create Linux(Ubuntu) VM
+
+Create Windows VM 
+
+Create VM+LB
+
+----------
 Install the tools:
 
 ../build-environment.sh
