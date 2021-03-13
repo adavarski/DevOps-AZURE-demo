@@ -1,4 +1,4 @@
-### Example Azure Ubuntu virtual machine
+### Example Azure Ubuntu VM
 
 #### Architecture diagram
 
