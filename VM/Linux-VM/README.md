@@ -21,7 +21,7 @@ make terraform-plan
 Install the tools:
 
 ```bash
-../../build-environment.sh
+./provision-tools.sh
 ```
 
 Login into azure-cli:
