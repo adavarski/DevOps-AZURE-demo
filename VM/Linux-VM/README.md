@@ -1,6 +1,6 @@
-an example azure ubuntu virtual machine
+### Example Azure Ubuntu virtual machine
 
-### Architecture diagram
+#### Architecture diagram
 
 Pre:
 ```
@@ -16,7 +16,7 @@ make terraform-plan
 
 ![](architecture.png)
 
-# Usage (on a Ubuntu Desktop)
+#### Usage (on a Ubuntu Desktop)
 
 Install the tools:
 
