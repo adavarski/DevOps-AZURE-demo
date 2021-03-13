@@ -1,3 +1,5 @@
+### Demos:
+
 [Create Linux(Ubuntu) VM](https://github.com/adavarski/DevOps-AZURE-demo/tree/main/VM/Linux-VM)
 
 [Create WindowsServer(2019-Datacenter) VM](https://github.com/adavarski/DevOps-AZURE-demo/tree/main/VM/Windows-VM)
@@ -5,7 +7,7 @@
 [Create Load Balancer + Linux VMs](https://github.com/adavarski/DevOps-AZURE-demo/tree/main/VM/LB)
 
 
-----------Quick howto-----------
+### Quick terraform howto
 Install the tools:
 
 ../build-environment.sh
