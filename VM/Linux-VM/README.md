@@ -82,6 +82,8 @@ ssh -i ~/.ssh/azure-devops devops@"$(terraform output app_ip_address)"
 Destroy the partial/whole infrastructure:
 
 ```bash
+make terraform-destroy-app # destroy just the app vm (and whatever resources depend on it).
+make terraform-destroy # destroy everything.
 terraform destroy --target azurerm_linux_virtual_machine.app # destroy just the app vm (and whatever resources depend on it).
 terraform destroy # destroy everything.
 ```
