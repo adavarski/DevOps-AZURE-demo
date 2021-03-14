@@ -84,6 +84,10 @@ Destroy the partial/whole infrastructure:
 ```bash
 make terraform-destroy-app # destroy just the app vm (and whatever resources depend on it).
 make terraform-destroy # destroy everything.
+
+
+export TF_VAR_admin_username="$USER"
+export TF_VAR_admin_ssh_key_data="$(cat ~/.ssh/azure-devops.pub)"
 terraform destroy --target azurerm_linux_virtual_machine.app # destroy just the app vm (and whatever resources depend on it).
 terraform destroy # destroy everything.
 ```
