@@ -10,8 +10,9 @@
 ### Quick terraform howto
 Install the tools:
 
-../build-environment.sh
-
+```
+./provision-tools.sh
+```
 Login into azure-cli:
 ```
 az login
@@ -30,9 +31,12 @@ terraform init
 ```
 Launch the example:
 ```
-terraform apply
-```
+export TF_VAR_admin_username="$USER"
+export TF_VAR_admin_ssh_key_data="$(cat ~/.ssh/azure-devops.pub)"
 
+terraform plan -out=tfplan
+terraform apply tfplan
+```
 Clean environment:
 ```
 terraform destroy
