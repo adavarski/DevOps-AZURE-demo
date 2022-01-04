@@ -123,6 +123,7 @@ resources on the same infrastructure.
 - This file can contain sensitive data, so it must be secure.
 - When provisioning multiple environments, it is necessary to be able to use
 multiple tfstate files.
+
 With all of these points, it is not possible to keep this tfstate file locally or even to archive it in an SCM. To solve this problem, Terraform allows this tfstate file to be stored in a shared and secure storage called the remote backend. Terraform supports several types of remote backends; the list is available
 here: https://www.terraform.io/docs/backends/types/remote.html.
 
