@@ -78,20 +78,14 @@ If several subscriptions are accessed, the desired one can be selected with the 
 ```
 az account set --subscription="<Subscription ID>"
 ```
-Then, we configure the Terraform provider as before with the provider, "azurerm" { } . Of course, this authentication method is not to be done in the case of execution on a remote server. For more information on the provider configuration, refer to the documentation: https://www.terraform.io/docs/providers/azurerm/
-index.html .
+Then, we configure the Terraform provider as before with the provider, "azurerm" { } . Of course, this authentication method is not to be done in the case of execution on a remote server. For more information on the provider configuration, refer to the documentation: https://www.terraform.io/docs/providers/azurerm/index.html .
 
 The Terraform configuration for Azure is, therefore, defined by the configuration of the provider that uses the information from an Azure SP. Once this configuration is complete, we can start writing Terraform code to manage and provision Azure resources.
 
 #### Deploying the infrastructure with Terraform
 
-With the Terraform code written, we now need to run Terraform to deploy our
-infrastructure.
-However, before any execution, it is necessary to first provide authentication with the
-Azure SP to ensure that Terraform can manage Azure resources.
-For this, we can either set the environment variables specific to Terraform to contain the
-information of the SP created earlier in the Configuring Terraform for Azure section or use
-the az cli script.
+With the Terraform code written, we now need to run Terraform to deploy our infrastructure. However, before any execution, it is necessary to first provide authentication with the Azure SP to ensure that Terraform can manage Azure resources. For this, we can either set the environment variables specific to Terraform to contain the information of the SP created earlier in the Configuring Terraform for Azure section or use the az cli script.
+
 The following script exports the four Terraform environment variables in the Linux OS:
 ```
 export ARM_SUBSCRIPTION_ID=xxxxx-xxxxx-xxxx-xxxx
@@ -116,6 +110,7 @@ terraform apply --auto-approve out.tfplan
 
 When Terraform handles resources, it writes the state of these resources in a tfstate file. This file is in JSON format and preserves the resources and their properties throughout the execution of Terraform. By default, this file, called terraform.tfstate , is created locally when the first execution
 of the apply command is executed. It will then be used by Terraform each time the plan command is executed in order to compare its state (written in this tfstate) with that of the target infrastructure, and hence return the preview of what will be applied. When using Terraform in an enterprise, this locally stored tfstate file poses many problems:
+
 - Knowing that this file contains the status of the infrastructure, it should not be
 deleted. If deleted, Terraform may not behave as expected when it is executed.
 - It must be accessible at the same time by all members of the team handling
@@ -132,6 +127,7 @@ We will, therefore, implement and use a remote backend in three steps:
 1. The creation of the storage account
 2. Terraform configuration for the remote backend
 3. The execution of Terraform with the use of this remote backend
+
 ```
 Let's look in detail at the execution of these steps:
 1. To create an Azure Storage Account and a blob container, we can use either the
@@ -214,7 +210,13 @@ vault status
 
 ### Writing secrets in Vault
 vault kv put secret/vmadmin vmpassword=admin123*
-vault kv put secret/vmadmin vmpassword=admin123* vmadmin=appadmin
+
+Note: In Vault, all protected data is stored in a path that corresponds to an organizational location in Vault. The default path for Vault is secret/ , and it is possible to create custom paths that will allow better management of secret rights and better organization by domain, topic, or application. About the secrets stored in Vault, one of its advantages is that it is possible to store multiple data in the same secret; for example, we'll update the secret data that we have created with another secret, which is the login admin of the VM. For this, we'll execute the following command that adds another key-value secret in the same Vault data:
+
+vault kv put secret/vmadmin vmpassword=admin123* vmadmin=appkadmin
+
+As we can see in this execution, we used exactly the same command with the same secret, and we added new key-value data, that is, vmadmin .
+
 vault kv get secret/vmadmin
 vault kv get -version=1 secret/vmadmin
 
