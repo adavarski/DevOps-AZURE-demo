@@ -49,10 +49,10 @@ Once the Azure SP has been created, we will configure our Terraform code to conn
 code:
 ```
 provider "azurerm" {
-subscription_id = "<subscription ID>"
-client_id = "<Client ID>"
-client_secret = "<Client Secret>"
-tenant_id = "<Tenant Id>"
+  subscription_id = "<subscription ID>"
+  client_id = "<Client ID>"
+  client_secret = "<Client Secret>"
+  tenant_id = "<Tenant Id>"
 }
 ```
 In this code, we indicate that the provider we are using is azurerm and that the authentication information to Azure is the service principal created. However, for security reasons, it is not advisable to put identification information in code, knowing that this code may be accessible by other people.
@@ -112,7 +112,7 @@ terraform plan -out=out.tfplan
 terraform apply --auto-approve out.tfplan
 ```
 
-Note: Protecting tfstate in a remote backend
+#### Protecting tfstate in a remote backend
 
 When Terraform handles resources, it writes the state of these resources in a tfstate file. This file is in JSON format and preserves the resources and their properties throughout the execution of Terraform. By default, this file, called terraform.tfstate , is created locally when the first execution
 of the apply command is executed. It will then be used by Terraform each time the plan command is executed in order to compare its state (written in this tfstate) with that of the target infrastructure, and hence return the preview of what will be applied. When using Terraform in an enterprise, this locally stored tfstate file poses many problems:
@@ -195,4 +195,78 @@ externalizing the values of the backend properties and for better readability of
 
 With this remote backend, the tfstate file will no longer be stored locally, but on a storage account, which is a shared space. Therefore, it can be used at the same time by several users. This storage account offers, at the same time, security to protect the sensitive data of the tfstate but also the possibilities of backups and restoration of the tfstate files, which are an essential and critical element of Terraform as well.
 
+```
+
+#### Getting HashiCorp Vault secrets in Terraform
+
+It is very important to protect the infrastructure configuration information that we write in Terraform code. One way to protect this sensitive data is to store it in a secret manager such as Vault and recover it directly with Terraform dynamically. 
+
+Use of HashiCorp's Vault, which is a secret data manager (EXAMPLE):
+
+```
+### Installing Vault locally: setup_environment_ubuntu.sh
+vault --version
+
+### Starting the Vault server
+vault server -dev
+export VAULT_ADDR='http://127.0.0.1:8200'
+vault status
+
+### Writing secrets in Vault
+vault kv put secret/vmadmin vmpassword=admin123*
+vault kv put secret/vmadmin vmpassword=admin123* vmadmin=appadmin
+vault kv get secret/vmadmin
+vault kv get -version=1 secret/vmadmin
+
+Note: Using the Vault UI web interface: http://127.0.0.1:8200/ui (use token from vault server -dev output)
+
+### Getting Vault secrets in Terraform
+Here is an example of Terraform code that allows you to retrieve the password of a VM that you want to provision from Vault. This example of Terraform code is composed of three blocks, which are as follows:
+1. First, we use the Vault provider for configuring the Vault URL:
+
+provider "vault" {
+  address = "http://127.0.0.1:8200" #Local Vault Url
+}
+
+The Vault provider is configured with the Vault server configuration and its authentication. In our case, we configure the Vault server URL in the Terraform code, and for the authentication of a token, we'll use an environment variable when running Terraform after the explanation of the code. For more details on the Terraform Vault provider and its configuration, see the documentation: https://www.terraform.io/docs/providers/vault/index.html .
+
+2. Then, we add the Terraform data block, vault_generic_secret , which is used for retrieving a secret from a Vault server:
+
+data "vault_generic_secret" "vmadmin_account" {
+   path = "secret/vmadmin"
+}
+
+This data block allows us to retrieve (in read only mode) the content of a secret stored in Vault. Here, we ask Terraform to retrieve the secret that is in the Vault secret/vmadmin path that we created earlier in this section. For more details on the vault_generic_secret data and its configuration, see the documentation: https://www.terraform.io/docs/providers/vault/d/generic_secret.html .
+
+3. Finally, we add an output block to use the decrypted value of the secret:
+
+output "vmpassword" {
+  value = "${data.vault_generic_secret.vmadmin_account.data["vmpassword"]}"
+  sensitive = true
+}
+
+This block provides an example of the exploitation of the secret. The data.vault_generic_secret.vmadmin_account.data["vmpassword"] expression is used to get the secret returned by the previously used data block. In the data array, we add the name of only those keys for which we need the encrypted values to be recovered. Also, this output is considered sensitive so that Terraform does not display its value in plain text when it is executed.
+
+We have finished writing the Terraform code; we'll now quickly execute it to see the recovery of the secret.
+
+To execute Terraform, we go to a Terminal in the folder that contains the Terraform code, and then we proceed in this order:
+1. Export the VAULT_TOKEN environment variable with the value of the Vault token. In our development mode case, this token is provided at the start of the Vault
+server.
+The following command shows the export of this environment variable on a Linux OS:
+
+export VAULT_TOKEN=xxxxxxxxxxxx
+
+2. Then, we'll execute Terraform with these commands:
+
+terraform init
+terraform plan
+terraform apply
+
+We can see that the value of Terraform output named vmpassword is not displayed in clear text in the Terminal.
+
+3. Finally, we display the Terraform output value in JSON format with the terraform output command with the -json option:
+
+terraform output -json
+
+Note: We see that Terraform has displayed the value of the key that was in the secret, which we had inserted in Vault. This value can now be used for any sensitive data that should not be stored in Terraform code, such as VM passwords. However, be careful: we have protected our Terraform code by outsourcing all sensitive data to a secret manager, but it should not be forgotten that Terraform stores all information including data and output information, in the tfstate file. It is therefore very important to protect it by storing the tfstate file in a protected remote backend.
 ```
