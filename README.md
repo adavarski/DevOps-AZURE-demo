@@ -72,7 +72,7 @@ As a result, the Terraform code no longer contains any identification informatio
 
 #### Terraform configuration for local development and testing
 
-When you work locally and want to test the Terraform code quickly, in a sandbox environment, for example, it may be more convenient and faster to use your own Azure account instead of using an SP. To do this, it is possible to connect to Azure beforehand with the az login command, and then enter your identification information in the window that opens.
+When you work locally and want to test the Terraform code quickly, in a sandbox environment, for example, it may be more convenient and faster to use your own Azure account instead of using an SP. To do this, it is possible to connect to Azure beforehand with the ```az login``` command, and then enter your identification information in the window that opens.
 
 If several subscriptions are accessed, the desired one can be selected with the following command:
 ```
