@@ -1,9 +1,9 @@
-#### Install azure-cli, terraform, kubectl, needed packages
+### Install azure-cli, terraform, kubectl, needed packages
 
 ```
 $ ./build-environment.sh
 ```
-#### Simple examples:
+### Simple examples:
 
 - [Azure AKS (managed k8s)](https://github.com/adavarski/DevOps-AZURE-demo/tree/main/AKS)
 
